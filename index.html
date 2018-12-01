@@ -220,6 +220,45 @@
 </style>
 
 <script>
+  const triggers = document.querySelectorAll('.cool > li');
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+function handleEnter() {
+  this.classList.add('trigger-enter');
+  setTimeout(() => {
+    if (this.classList.contains('trigger-enter')) {
+      //don't add the trigger-enter-active class if there is no trigger-enter. This means don't show content of dropdown if mouse has hovered off from li before these 150ms finish
+      this.classList.add('trigger-enter-active');
+    }
+  }, 150);
+  background.classList.add('open');
+
+  const dropdown = this.querySelector('.dropdown');
+  const navCoords = nav.getBoundingClientRect();
+  const dropdownCoords = dropdown.getBoundingClientRect();
+
+  const coords = {
+    height: dropdownCoords.height,
+    width: dropdownCoords.width,
+    top: dropdownCoords.top - navCoords.top,
+    left: dropdownCoords.left - navCoords.left
+  }
+  
+
+  background.style.setProperty('width', `${coords.width}px`);
+  background.style.setProperty('height', `${coords.height}px`);
+
+  background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+}
+
+function handleLeave() {
+  this.classList.remove('trigger-enter', 'trigger-enter-active');
+  background.classList.remove('open');
+}
+
+triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
 </script>
 
 </body>
